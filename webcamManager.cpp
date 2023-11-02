@@ -4,19 +4,23 @@
 #include "opencv2/imgproc.hpp"
 #include "opencv2/videoio.hpp"
 #include <iostream>
+#include <thread>
+#include <mutex>
 
 using namespace std;
 using namespace cv;
 
-int WebcamManager::start(){
-    VideoCapture capture;
-    Mat frame;
-    bool tryflip;
-    CascadeClassifier cascade;
-    double scale;
+WebcamManager::WebcamManager(Game *game){
+    this->game = game;
+}
 
+WebcamManager::~WebcamManager(){}
+
+int WebcamManager::init(){
     cascadeName = "haarcascade_frontalface_default.xml";
+
     scale = 2; // usar 1, 2, 4.
+
     if (scale < 1)
         scale = 1;
     tryflip = true;
@@ -33,24 +37,32 @@ int WebcamManager::start(){
         return 1;
     }
 
-    if( capture.isOpened() ) {
+    if(capture.isOpened()) {
         cout << "Video capturing has been started ..." << endl;
 
-        while (1)
-        {
-            capture >> frame;
-            if(frame.empty())
-                break;
-
-            detectAndDraw(frame, cascade, scale, tryflip);
-
-            char c = (char)waitKey(10);
-            if( c == 27 || c == 'q' || c == 'Q' )
-                break;
-        }
+        thread video_thread(&WebcamManager::videoCapture, this);
+        video_thread.join();
     }
 
     return 0;
+}
+
+void WebcamManager::videoCapture(){
+    while(1){
+        capture >> frame;
+
+        if(frame.empty())
+            break;
+        
+        detectAndDraw(frame, cascade, scale, tryflip);
+
+        std::unique_lock<std::mutex> lock(mtx);
+            
+        if(game->isRunning())
+            break;
+        
+        lock.unlock();
+    }
 }
 
 void WebcamManager::detectAndDraw(Mat& img, CascadeClassifier& cascade, double scale, bool tryflip)

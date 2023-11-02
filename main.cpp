@@ -1,19 +1,18 @@
 #include "game.h"
 #include "webcamManager.h"
 #include <iostream>
-#include <thread>
 
 using namespace std;
 
-int main( int argc, const char** argv )
+int main( int argc, const char** argv)
 {
     //g++ main.cpp game.cpp webcamManager.cpp -o cinco_noites `pkg-config --cflags opencv4` `pkg-config --libs --static opencv4` -lSDL2 -pthread
     Game *game = new Game();
-    WebcamManager *webcam = new WebcamManager();
+    WebcamManager *webcam = new WebcamManager(game);
 
     game->init(false);
 
-    thread webcam_thread(webcam->start());
+    webcam->init();
 
     while(game->isRunning()){
         game->handleEvents();
@@ -22,5 +21,7 @@ int main( int argc, const char** argv )
     }
 
     game->close();
+
+    delete webcam;
     return 0;
 }
