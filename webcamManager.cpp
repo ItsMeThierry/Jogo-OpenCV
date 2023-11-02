@@ -4,8 +4,6 @@
 #include "opencv2/imgproc.hpp"
 #include "opencv2/videoio.hpp"
 #include <iostream>
-#include <thread>
-#include <mutex>
 
 using namespace std;
 using namespace cv;
@@ -39,30 +37,9 @@ int WebcamManager::init(){
 
     if(capture.isOpened()) {
         cout << "Video capturing has been started ..." << endl;
-
-        thread video_thread(&WebcamManager::videoCapture, this);
-        video_thread.join();
     }
 
     return 0;
-}
-
-void WebcamManager::videoCapture(){
-    while(1){
-        capture >> frame;
-
-        if(frame.empty())
-            break;
-        
-        detectAndDraw(frame, cascade, scale, tryflip);
-
-        std::unique_lock<std::mutex> lock(mtx);
-            
-        if(game->isRunning())
-            break;
-        
-        lock.unlock();
-    }
 }
 
 void WebcamManager::detectAndDraw(Mat& img, CascadeClassifier& cascade, double scale, bool tryflip)
@@ -87,12 +64,14 @@ void WebcamManager::detectAndDraw(Mat& img, CascadeClassifier& cascade, double s
         //|CASCADE_DO_ROUGH_SEARCH
         |CASCADE_SCALE_IMAGE,
         Size(40, 40) );
+    
     t = (double)getTickCount() - t;
-    printf( "detection time = %g ms\n", t*1000/getTickFrequency());
+    //printf( "detection time = %g ms\n", t*1000/getTickFrequency());
     // PERCORRE AS FACES ENCONTRADAS
     for ( size_t i = 0; i < faces.size(); i++ )
     {
         Rect r = faces[i];
+        cout << r.x << " ; " << r.y << endl;
         rectangle( smallImg, Point(cvRound(r.x), cvRound(r.y)),
                     Point(cvRound((r.x + r.width-1)), cvRound((r.y + r.height-1))),
                     color, 3);

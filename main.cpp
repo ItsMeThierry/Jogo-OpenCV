@@ -14,14 +14,22 @@ int main( int argc, const char** argv)
 
     webcam->init();
 
-    while(game->isRunning()){
+    while(1){
+        if(!game->isRunning())
+            break;
+        
+        webcam->capture >> webcam->frame;
+        webcam->detectAndDraw(webcam->frame, webcam->cascade, webcam->scale, webcam->tryflip);
+
         game->handleEvents();
         game->update();
         game->render();
+
     }
 
     game->close();
 
     delete webcam;
+
     return 0;
 }

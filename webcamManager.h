@@ -10,19 +10,18 @@ using namespace cv;
 
 class WebcamManager{
     private:
+        Game *game;
+
+    public:
         VideoCapture capture;
         Mat frame;
         bool tryflip;
         CascadeClassifier cascade;
         double scale;
         string cascadeName;
-        Game *game;
-        mutex mtx;
-
-    public:
+        
         WebcamManager(Game *game);
         ~WebcamManager();
         int init();
         void detectAndDraw(Mat& img, CascadeClassifier& cascade, double scale, bool tryflip);
-        void videoCapture();
 };
