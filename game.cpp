@@ -4,12 +4,9 @@
 #include "night.h"
 #include <iostream>
 
-SDL_Rect destR, srcR;
-WebcamManager *webcam;
+int i;
 Rect r;
-int i = 0;
-
-Night night;
+Night* night;
 
 void Game::init(bool fullscream){
     int flags = 0;
@@ -18,7 +15,9 @@ void Game::init(bool fullscream){
         flags = SDL_WINDOW_FULLSCREEN;
     }
 
-    if(SDL_Init(SDL_INIT_EVERYTHING) == 0){
+    webcam = new WebcamManager();
+
+    if(SDL_Init(SDL_INIT_EVERYTHING) == 0 && webcam->init() == 0){
         std::cout << "Inicializando...\n";
 
         window = SDL_CreateWindow("Cinco Noites", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 848, 480, SDL_WINDOW_SHOWN);
@@ -33,12 +32,10 @@ void Game::init(bool fullscream){
             std::cout << "Renderizando janela...\n";
         }
 
-        webcam = new WebcamManager();
+        i = 0;
 
-        webcam->init();
-
-        night = Night(renderer);
-        night.start();
+        night = new Night(renderer);
+        night->start();
 
         running = true;
     } else{
@@ -61,39 +58,45 @@ void Game::handleEvents(){
 
 void Game::render(){
     SDL_RenderClear(renderer);
-    night.render();
+    night->render();
     SDL_RenderPresent(renderer);
 }
 
-void Game::update(){
+int Game::update(){
     webcam->capture >> webcam->frame;
-    r = webcam->detectAndDraw(webcam->frame, webcam->cascade, webcam->scale, webcam->tryflip);
+    
+    if(webcam->frame.empty()){
+        return -1;
+    }
 
-    destR.w = 848;
-    destR.h = 480;
+    r = webcam->detectFace();
 
-    srcR.w = 848;
-    srcR.h = 480;
+    cout << r.x << " ; " << r.y << endl;
 
+    //night.update();
+    /*
     if(r.x > 0 && r.y > 0){
-        cout << r.x << " ; " << r.y << endl;
+        
 
-        if(r.x > 150 && i < 10){
+        if(r.x > 150 && i < 13){
             i++;
         } else if(r.x < 100 && i > 0){
             i--;
         }
 
-        srcR.y = (480*i)+1;
+        //night->cenario->getTexture().changeToFrame(i);
     }
-    
+    */
+    return 0;
 }
 
 void Game::close(){
     SDL_DestroyWindow(window);
-    SDL_DestroyTexture(roomTex);
+    night->close();
     SDL_DestroyRenderer(renderer);
     SDL_Quit();
+    
+    delete webcam;
     std::cout << "Fechando o jogo...\n";
 }
 

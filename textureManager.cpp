@@ -2,8 +2,10 @@
 #include "SDL2/SDL_image.h"
 #include <iostream>
 
-SDL_Texture* TextureManager::loadTexture(const char* fname, SDL_Renderer* renderer){
-    SDL_Surface* tempSurface = IMG_Load(fname);
+using namespace std;
+
+SDL_Texture* TextureManager::loadTexture(const string fname, SDL_Renderer* renderer){
+    SDL_Surface* tempSurface = IMG_Load(fname.c_str());
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, tempSurface);
     SDL_FreeSurface(tempSurface);
 

@@ -4,21 +4,29 @@
 using namespace std;
 
 Texture::Texture(){
-    file = "resources/orange.png";
-    width = 100;
-    height = 84;
+    file = "orange.png";
+    //srcR->w = 100;
+    //srcR->h = 84;
     frames = 0;
     frame = 0;
 }
 
 Texture::Texture(string file, int w, int h, int f){
     this->file = file;
-    width = w;
-    height = h;
+    //srcR->w = w;
+    //srcR->h = h;
     frames = f;
     frame = 0;
 }
 
 void Texture::changeToFrame(int pos){
-    frame = pos;
+    srcR->y = srcR->h*pos+1;
+}
+
+SDL_Rect* Texture::getSrcR(){
+    return srcR;
+}
+
+string Texture::getFileName(){
+    return file;
 }

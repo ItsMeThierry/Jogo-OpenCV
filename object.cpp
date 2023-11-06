@@ -3,12 +3,13 @@
 
 Object::Object(Texture texture){
     this->texture = texture;
-    
-    srcR.w = texture.getWidth();
-    srcR.h = texture.getHeght();
 
-    destR.x = 0;
-    destR.y = 0;
+    //destR->w = texture.getSrcR()->w;
+    //destR->h = texture.getSrcR()->h;
+}
+
+SDL_Rect* Object::getDestR(){
+    return destR;
 }
 
 Texture Object::getTexture(){

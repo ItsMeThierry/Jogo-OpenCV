@@ -7,12 +7,12 @@ class Game{
         bool running;
         SDL_Renderer *renderer;
         SDL_Window *window;
-        SDL_Texture* roomTex;
+        WebcamManager *webcam;
         
     public:
         void init(bool fullscream);
         void handleEvents();
-        void update();
+        int update();
         void render();
         void close();
         bool isRunning();

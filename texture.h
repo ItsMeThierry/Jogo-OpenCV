@@ -1,11 +1,11 @@
 #pragma once
 #include "SDL2/SDL.h"
+#include <string>
 
 class Texture{
     private:
         std::string file;
-        int width;
-        int height;
+        SDL_Rect* srcR;
         int frames;
         int frame;
 
@@ -14,6 +14,6 @@ class Texture{
         Texture(std::string file, int w, int h, int f);
         void changeToFrame(int pos);
 
-        int getWidth();
-        int getHeght();
+        SDL_Rect* getSrcR();
+        std::string getFileName();
 };

@@ -8,7 +8,6 @@
 class Night{
     private:
         std::vector<Object*> objetos;
-        Object* cenario;
         SDL_Renderer *renderer;
         int pos; //0 bedroom, 1 right door, 2 left door
         bool light;
@@ -16,7 +15,11 @@ class Night{
         float time;
 
     public:
+        Object* cenario;
+        Night();
         Night(SDL_Renderer *renderer);
         void start();
+        void update();
         void render();
+        void close();
 };

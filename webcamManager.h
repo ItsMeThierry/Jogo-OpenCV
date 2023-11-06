@@ -17,5 +17,5 @@ class WebcamManager{
         string cascadeName;
         
         int init();
-        Rect detectAndDraw(Mat& img, CascadeClassifier& cascade, double scale, bool tryflip);
+        Rect detectFace();
 };

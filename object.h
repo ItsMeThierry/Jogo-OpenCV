@@ -4,14 +4,13 @@
 
 class Object{
     protected:
-        SDL_Rect destR;
-        SDL_Rect srcR;
+        SDL_Rect* destR;
         Texture texture;
     
     public:
         Object(Texture texture);
-        void setXPos(int x);
-        void setYPos(int y);
+
+        SDL_Rect* getDestR();
 
         Texture getTexture();
 };

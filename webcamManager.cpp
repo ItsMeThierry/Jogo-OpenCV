@@ -22,50 +22,46 @@ int WebcamManager::init(){
         return -1;
     }
 
-    //if(!capture.open("video.mp4")) para testar com um video
     if(!capture.open(0)) // para testar com a webcam
     {
-        cout << "Capture from camera #0 didn't work" << endl;
+        cout << "Camera não detectada" << endl;
         return 1;
     }
 
     if(capture.isOpened()) {
-        cout << "Video capturing has been started ..." << endl;
+        cout << "Captura esta iniciando" << endl;
     }
 
     return 0;
 }
 
-Rect WebcamManager::detectAndDraw(Mat& img, CascadeClassifier& cascade, double scale, bool tryflip)
+Rect WebcamManager::detectFace()
 {
-    double t = 0;
-    vector<Rect> faces;
     Mat smallImg, gray;
     Scalar color = Scalar(255,0,0);
-
     double fx = 1 / scale;
-    resize(img, smallImg, Size(), fx, fx, INTER_LINEAR_EXACT );
-    if( tryflip )
+
+    resize(frame, smallImg, Size(), fx, fx, INTER_LINEAR_EXACT);
+
+    if(tryflip){
         flip(smallImg, smallImg, 1);
-    cvtColor( smallImg, gray, COLOR_BGR2GRAY );
-    equalizeHist( gray, gray );
+    }
+        
 
-    t = (double)getTickCount();
+    cvtColor(smallImg, gray, COLOR_BGR2GRAY);
+    equalizeHist(gray, gray);
 
-    cascade.detectMultiScale( gray, faces,
-        1.3, 2, 0
+    vector<Rect> faces;
+
+    cascade.detectMultiScale(gray, faces, 1.3, 2, 0
         //|CASCADE_FIND_BIGGEST_OBJECT
         //|CASCADE_DO_ROUGH_SEARCH
         |CASCADE_SCALE_IMAGE,
-        Size(40, 40) );
+        Size(40, 40));
     
-    t = (double)getTickCount() - t;
-    //printf( "detection time = %g ms\n", t*1000/getTickFrequency());
-    // PERCORRE AS FACES ENCONTRADAS
-    for ( size_t i = 0; i < faces.size(); i++ )
-    {
-        Rect r = faces[i];
-        
-        return r;
+    if(faces.size() == 0){
+        return Rect();
     }
+
+    return faces[0];
 }
