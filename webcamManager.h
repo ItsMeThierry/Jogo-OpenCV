@@ -1,5 +1,4 @@
 #pragma once
-#include "game.h"
 #include "opencv2/objdetect.hpp"
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
@@ -9,9 +8,6 @@ using namespace std;
 using namespace cv;
 
 class WebcamManager{
-    private:
-        Game *game;
-
     public:
         VideoCapture capture;
         Mat frame;
@@ -20,8 +16,6 @@ class WebcamManager{
         double scale;
         string cascadeName;
         
-        WebcamManager(Game *game);
-        ~WebcamManager();
         int init();
-        void detectAndDraw(Mat& img, CascadeClassifier& cascade, double scale, bool tryflip);
+        Rect detectAndDraw(Mat& img, CascadeClassifier& cascade, double scale, bool tryflip);
 };

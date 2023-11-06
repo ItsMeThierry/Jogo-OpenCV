@@ -8,12 +8,6 @@
 using namespace std;
 using namespace cv;
 
-WebcamManager::WebcamManager(Game *game){
-    this->game = game;
-}
-
-WebcamManager::~WebcamManager(){}
-
 int WebcamManager::init(){
     cascadeName = "haarcascade_frontalface_default.xml";
 
@@ -42,7 +36,7 @@ int WebcamManager::init(){
     return 0;
 }
 
-void WebcamManager::detectAndDraw(Mat& img, CascadeClassifier& cascade, double scale, bool tryflip)
+Rect WebcamManager::detectAndDraw(Mat& img, CascadeClassifier& cascade, double scale, bool tryflip)
 {
     double t = 0;
     vector<Rect> faces;
@@ -71,12 +65,7 @@ void WebcamManager::detectAndDraw(Mat& img, CascadeClassifier& cascade, double s
     for ( size_t i = 0; i < faces.size(); i++ )
     {
         Rect r = faces[i];
-        cout << r.x << " ; " << r.y << endl;
-        rectangle( smallImg, Point(cvRound(r.x), cvRound(r.y)),
-                    Point(cvRound((r.x + r.width-1)), cvRound((r.y + r.height-1))),
-                    color, 3);
+        
+        return r;
     }
-
-    // Desenha o frame na tela
-    imshow( "result", smallImg );
 }

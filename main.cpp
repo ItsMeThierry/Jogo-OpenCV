@@ -1,35 +1,38 @@
 #include "game.h"
-#include "webcamManager.h"
 #include <iostream>
 
 using namespace std;
 
 int main( int argc, const char** argv)
 {
-    //g++ main.cpp game.cpp webcamManager.cpp -o cinco_noites `pkg-config --cflags opencv4` `pkg-config --libs --static opencv4` -lSDL2 -pthread
+    //g++ main.cpp game.cpp webcamManager.cpp textureManager.cpp -o cinco_noites `pkg-config --cflags opencv4` `pkg-config --libs --static opencv4` -lSDL2 -lSDL2_image
+    //g++ image.cpp -o imagens `pkg-config --cflags opencv4` `pkg-config --libs --static opencv4`
+    
+    const int FPS = 60;
+    const int frameDelay = 1000/FPS;
+
+    Uint32 frameStart;
+    int frameTime;
+    
     Game *game = new Game();
-    WebcamManager *webcam = new WebcamManager(game);
 
     game->init(false);
 
-    webcam->init();
-
-    while(1){
-        if(!game->isRunning())
-            break;
-        
-        webcam->capture >> webcam->frame;
-        webcam->detectAndDraw(webcam->frame, webcam->cascade, webcam->scale, webcam->tryflip);
+    while(game->isRunning()){
+        frameStart = SDL_GetTicks();
 
         game->handleEvents();
         game->update();
         game->render();
 
+        frameTime = SDL_GetTicks() - frameStart;
+
+        if(frameDelay > frameTime){
+            SDL_Delay(frameDelay - frameTime);
+        }
     }
 
     game->close();
-
-    delete webcam;
 
     return 0;
 }
