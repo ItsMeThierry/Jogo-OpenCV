@@ -35,7 +35,7 @@ int WebcamManager::init(){
     return 0;
 }
 
-Rect WebcamManager::detectFace()
+void WebcamManager::detectFace(int* x, int* y)
 {
     Mat smallImg, gray;
     Scalar color = Scalar(255,0,0);
@@ -60,8 +60,12 @@ Rect WebcamManager::detectFace()
         Size(40, 40));
     
     if(faces.size() == 0){
-        return Rect();
+        *x = -1;
+        *y = -1;
+    } else{
+        *x = faces[0].x;
+        *y = faces[0].y;
     }
 
-    return faces[0];
+    //cout << "X: " << *x << " Y: " << *y << endl;
 }

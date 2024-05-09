@@ -5,10 +5,10 @@ using namespace std;
 
 int main( int argc, const char** argv)
 {
-    //g++ main.cpp game.cpp webcamManager.cpp textureManager.cpp object.cpp bedroom.cpp night.cpp texture.cpp -o cinco_noites `pkg-config --cflags opencv4` `pkg-config --libs --static opencv4` -lSDL2 -lSDL2_image
+    //g++ main.cpp game.cpp webcamManager.cpp textureManager.cpp object.cpp enemy.cpp night.cpp gameOver.cpp texture.cpp -o cinco_noites `pkg-config --cflags opencv4` `pkg-config --libs --static opencv4` -lSDL2 -lSDL2_image -lSDL2_mixer
     //g++ image.cpp -o imagens `pkg-config --cflags opencv4` `pkg-config --libs --static opencv4`
     
-    const int FPS = 60;
+    const int FPS = 30;
     const int frameDelay = 1000/FPS;
 
     Uint32 frameStart;

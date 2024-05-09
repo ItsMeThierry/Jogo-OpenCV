@@ -17,5 +17,5 @@ class WebcamManager{
         string cascadeName;
         
         int init();
-        Rect detectFace();
+        void detectFace(int* x, int* y);
 };

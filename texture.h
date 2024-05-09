@@ -4,16 +4,18 @@
 
 class Texture{
     private:
-        std::string file;
         SDL_Rect* srcR;
         int frames;
         int frame;
+        int anim;
 
     public:
         Texture();
-        Texture(std::string file, int w, int h, int f);
+        Texture(int width, int height, int u, int v, int f);
         void changeToFrame(int pos);
+        int getFramePos();
 
         SDL_Rect* getSrcR();
-        std::string getFileName();
+        void changeAnim(int id);
+        int getAnim();
 };

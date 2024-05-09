@@ -4,29 +4,37 @@
 using namespace std;
 
 Texture::Texture(){
-    file = "orange.png";
-    //srcR->w = 100;
-    //srcR->h = 84;
-    frames = 0;
-    frame = 0;
 }
 
-Texture::Texture(string file, int w, int h, int f){
-    this->file = file;
-    //srcR->w = w;
-    //srcR->h = h;
+Texture::Texture(int width, int height, int u, int v, int f){
+    srcR = new SDL_Rect();
+    srcR->w = width;
+    srcR->h = height;
+    srcR->x = u;
+    srcR->y = v;
     frames = f;
     frame = 0;
+    anim = 0;
 }
 
 void Texture::changeToFrame(int pos){
-    srcR->y = srcR->h*pos+1;
+    srcR->y = srcR->h*pos;
+    frame = pos;
 }
 
 SDL_Rect* Texture::getSrcR(){
     return srcR;
 }
 
-string Texture::getFileName(){
-    return file;
+int Texture::getFramePos(){
+    return frame;
+}
+
+void Texture::changeAnim(int id){
+    srcR->x = 848*id;
+    anim = id;
+}
+
+int Texture::getAnim(){
+    return anim;
 }

@@ -5,6 +5,6 @@
 
 class TextureManager{
     public:
-        static SDL_Texture* loadTexture(const std::string fname, SDL_Renderer* renderer);
+        static SDL_Texture* loadTexture(std::string fname, SDL_Renderer* renderer);
         
 };
